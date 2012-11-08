@@ -12,8 +12,11 @@
  *
  * We want to provide more detail to New Relic on the transaction and late in
  * the page build seemed like the simplest place.
+ *
+ * For more information see http://drewish.com/content/2012/10/better_new_relic_reporting_on_sites_with_panels
+ *
  */
-function itk_admin_preprocess_page(&$variables) {
+function itk_admin_page_alter(&$page) {
   if (!extension_loaded('newrelic')) {
     return;
   }
@@ -26,8 +29,8 @@ function itk_admin_preprocess_page(&$variables) {
     // If it's a node page put the argument's node type into the transaction
     // name.
     if ($panel_page['name'] == 'node_view') {
-      if (isset($panel_page['contexts']['argument_nid_1']->data)) {
-        $node = $panel_page['contexts']['argument_nid_1']->data;
+      if (isset($panel_page['contexts']['argument_entity_id:node_1']->data)) {
+        $node = $panel_page['contexts']['argument_entity_id:node_1']->data;
         $name = 'page_manager_node_view_page/' . $node->type;
       }
     }
